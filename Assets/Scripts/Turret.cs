@@ -25,26 +25,52 @@ public class Turret : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0)
+        if(Application.isEditor)
         {
-            Touch touch = Input.GetTouch(0);
-            if(touch.phase == TouchPhase.Began)
+            if(Input.GetMouseButtonDown(0))
             {
-                Vector3 playerTouch = Camera.main.ScreenToWorldPoint(touch.position);
+                Vector3 playerTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 playerTouch.z = 0;
-                Vector3 direction = transform.position-playerTouch;
 
-                if(canShoot)
+              
+
+                //playerTouch.z = 0;
+
+                if (canShoot)
                 {
                     GameObject mark = SetMark(playerTouch);
                     Shoot(playerTouch, mark.transform);
                     rechargeTime = _rechargeTime;
                     canShoot = false;
                 }
-               
             }
-          
         }
+
+        if(Application.isMobilePlatform)
+        {
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
+                {
+                    Vector3 playerTouch = Camera.main.ScreenToWorldPoint(touch.position);
+                    playerTouch.z = 0;
+                    // Vector3 direction = transform.position-playerTouch;
+
+                    if (canShoot)
+                    {
+                        GameObject mark = SetMark(playerTouch);
+                        Shoot(playerTouch, mark.transform);
+                        rechargeTime = _rechargeTime;
+                        canShoot = false;
+                    }
+
+                }
+
+            }
+        }
+
+        
 
         if (rechargeTime <= 0)
         {
